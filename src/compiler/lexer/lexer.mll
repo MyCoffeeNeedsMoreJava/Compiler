@@ -36,11 +36,36 @@
   | RPAREN
   | LBRACE
   | RBRACE
+  | LBRACK
+  | RBRACK
   | DOT
-  |
+  | LE 
+  | GE
+  | LT
+  | LG
+  | TRUE
+  | FALSE
+  | LOGICALAND
+  | LOGICALOR
+  | EQ
+  | NEQ
+  | IF
+  | THEN
+  | ELSE
+  | WHILE
+  | FOR 
+  | OF 
+  | DO
+  | TO 
+  | IN 
+  | BREAK
+  | LET
+  | VAR
+  | NIL
 }
+
 let letter=['a'-'z''A'-'Z']
-let digit=['0'-'9']
+let digit=['0'-'9']+
 
 let integer = digit*
 let ident = ('_'|letter)('_'|letter|digit)*
@@ -51,6 +76,9 @@ let ident = ('_'|letter)('_'|letter|digit)*
 rule token = parse
 |  [' ' '\t' ]     { token lexbuf }     (* skip blanks *)
 | eof                 { EOF }
+| "let"               { LET }
+| "var"               { VAR }
+| "nil"               { NIL }
 | "rec"               { REC }
 | "ask"               { ASK }
 | "tell"              { TELL }
@@ -59,21 +87,46 @@ rule token = parse
 | ','                 { COMMA }
 | '.'                 { DOT }
 | ';'                 { SEMICOLON }
+| ':'                 { COLON }
 | ":="                { ASSIGN }
 | '('                 { RPAREN }
 | ')'                 { LPAREN }
 | '{'                 { RBRACE }
 | '}'                 { LBRACE }
+| '['                 { RBRACK }
+| ']'                 { LBRACK }
 | '*'                 { TIMES }
 | '%'                 { REMAINDER }
 | '+'                 { PLUS }
 | '-'                 { MINUS }
 | "array"             { ARRAY }
 | "if"                { IF }
+| "then"              { THEN }
+| "else"              { ELSE }
+| "while"             { WHILE }
+| "and"               { AND }
+| "or"                { OR }
+| "for"               { FOR }
+| "to"                { TO }
+| "do"                { DO }
+| "in"                { IN }
+| "end"               { END }
+| "of"                { OF }
+| "break"             { BREAK }
 | '\n'                { Lexing.new_line texbuf; NEWLINE }
 | "//"                { single_line_comment lexbuf }
 | "/*"                { multi_line_comment lexbuf }
 | '/'                 { DIVIDE }
+| '<'                 { LT }
+| '>'                 { GT }
+| "<="                { LE }
+| ">="                { GE }
+| "true"              { TRUE }
+| "false"             { FALSE }
+| "&&"                { LOGICALAND }
+| "||"                { LOGICALOR}
+| "="                 { EQ }
+| "!="                { NEQ }
 | digits as i         { INT (int_of_string i) }
 
 (* add your regexps here *)
